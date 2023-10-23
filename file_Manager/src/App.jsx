@@ -16,7 +16,7 @@ function App() {
 
   return (
     <>
-    <div className='all_apge' > <h1>Fire Base</h1>
+    <div className='all_apge' > <h1>File Manager</h1>
     
       <Navigation/>
      <Routes>
