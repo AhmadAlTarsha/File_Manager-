@@ -20,8 +20,8 @@ const FliePage = ({ allData, getData }) => {
         <button
           onClick={() => {
             console.log(ele.id);
-            deleteDoc(doc(firestore, "DB", `${ele.id}`)).then(() => {
-              const storegDelete = ref(storage, "images/" + ele.data().imgs);
+            deleteDoc(doc(firestore, "DB", `${ele.id}`)).then(async() => {
+              const storegDelete =await ref(storage,`${localStorage.getItem("uid") }/${ele.data().imgs}`);
               deleteFun(storegDelete);
             });
           }}
@@ -39,11 +39,4 @@ export default FliePage;
 
 
 
-
-console.log(a);
-var a=10
-// a( )//=1
-// function a(){
-// console.log(1);
-// }
 
