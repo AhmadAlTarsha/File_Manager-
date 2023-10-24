@@ -9,6 +9,9 @@ const Navigation = () => {
         
         <Link to="/"> Register </Link>
         <Link to="/login"> Login </Link>
+        <Link onClick={()=>{
+            localStorage.clear()
+        }}> logout </Link>
        
       </div>
     );

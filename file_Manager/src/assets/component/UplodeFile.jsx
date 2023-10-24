@@ -5,88 +5,67 @@ import {
   ref,
   uploadBytes,
   getDownloadURL,
-  getDocs
+  getDocs,
 } from "../../firebaseConfig";
-import { collection,where,query } from "firebase/firestore";
-import { firestore, addDoc ,} from "../../firebaseConfig";
-import { v4 } from "uuid";
+import { collection, where, query } from "firebase/firestore";
+import { firestore, addDoc } from "../../firebaseConfig";
 import FliePage from "./FliePage";
 const UplodeFile = () => {
-    const [allData,setAllData]=useState([])
-  const handelUplode = async() => {
-    const  mountainsRef = await ref(storage, `images/${v4()}`);
-    uploadBytes(mountainsRef,file).then(() => {
+  const [allData, setAllData] = useState([]);
+  const [file, setFile] = useState(null);
+  const handelUplode = async () => {
+    const mountainsRef = ref(storage, `${localStorage.getItem("uid")}/${file.name}`);
+    uploadBytes(mountainsRef, file).then(() => {
       getDownloadURL(mountainsRef)
-   
-        .then((val) => {
-          
-console.log(val);
+        .then(async (val) => {
           const fileData = {
             url: val,
             imgs: file.name,
-            uid:localStorage.getItem("uid")
-        
+            uid: localStorage.getItem("uid"),
           };
-          addFileToFirestore(fileData);
+          await addFileToFirestore(fileData);
+          await getdata()
         })
         .catch((error) => {
           console.log(error);
         });
     });
-    const addFileToFirestore =  (fileData) => {
-      addDoc(collection(firestore, "DB"), fileData)
-        .then(async(res) => {
-            console.log(res);
-//let Data= res.data()
+    const addFileToFirestore = async (fileData) => {
+      await addDoc(collection(firestore, "DB"), fileData)
+        .then(async (res) => {
           console.log("File data added to Firestore successfully");
-     //console.log(Data);
-     const db=  collection(firestore,"DB")
-        const getData= await getDocs(db)
-       
-        let arrayOfData=getData.docs
-        setAllData(arrayOfData)
         })
         .catch((error) => {
           console.log("Error adding file data to Firestore:", error);
         });
     };
-
   };
-  const getdata =async  ()=>{
-    try{
-    
-   
-    const q = query(collection(firestore,"DB"),  where("uid", "==", localStorage.getItem("uid")));
-        const getData= await getDocs(q)
-       let arrayOfData=getData.docs
-       console.log(arrayOfData);
-       setAllData(arrayOfData)
-        // getData.forEach((ele)=>{
-        //     console.log(ele.data());
-        // })  
-    } catch(err){
-        console.log(err);
+  const getdata = async () => {
+    try {
+      const q = query(
+        collection(firestore, "DB"),
+        where("uid", "==", localStorage.getItem("uid"))
+      );
+      const getData = await getDocs(q);
+      let arrayOfData = getData.docs;
+      setAllData(arrayOfData);
+    } catch (err) {
+      console.log(err);
     }
-   
-        
-    }
+  };
 
-    const [file, setFile] = useState(null);
-useEffect(()=>{
-   getdata()
-
-},[])
-    
-
-
+  useEffect(() => {
+    getdata();
+  }, []);
 
   return (
     <div>
-        <FliePage allData={allData}/>
+      <FliePage allData={allData}  getData={getdata} />
       <h1>Upload File</h1>
       <input
         type="file"
         onChange={(e) => {
+          e.preventDefault();
           setFile(e.target.files[0]);
         }}
       ></input>
