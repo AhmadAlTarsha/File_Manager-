@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../../App.css";
+import "../../App.css"
 import { doc, deleteDoc } from "firebase/firestore";
 import { firestore, storage } from "../../firebaseConfig";
 import { deleteObject, ref } from "firebase/storage";
@@ -16,8 +16,8 @@ const FliePage = ({ allData, getData }) => {
   const allImage = allData?.map((ele, i) => {
     return (
       <div key={ele.id} className="images">
-        <iframe  width="200px" height="200px" src={ele.data().url} />{" "}
-        <button
+        <iframe  className="iframe" src={ele.data().url} />{" "}
+        <button className="delete_btn"
           onClick={() => {
             console.log(ele.id);
             deleteDoc(doc(firestore, "DB", `${ele.id}`)).then(async() => {

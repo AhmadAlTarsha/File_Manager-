@@ -2,17 +2,21 @@ import React from 'react'
 import { useState } from 'react';
 import { auth,signInWithEmailAndPassword } from '../../firebaseConfig';
 import { useNavigate } from 'react-router-dom';
+import"../../App.css"
 
 const Login = () => {
 const navigate=useNavigate()
     const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [status, setStatus] = useState(false);
+  const [message, setMessage] = useState("");
   const handelLogin=()=>{
 signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     const user = userCredential.user;
      localStorage.setItem("uid", user.uid);
-    console.log(user);
+   
+  
    if (user.uid) {
    navigate("/uplode")}
   })
@@ -21,12 +25,15 @@ signInWithEmailAndPassword(auth, email, password)
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log(errorMessage);
+    setStatus(true)
+    setMessage("invalid login")
+
     
   });
   }
   
 return (
-    <div >
+    <div className='login-container' >
     <p >Login:</p>
     
       <br />
@@ -53,7 +60,9 @@ return (
         Login
       </button>
     
-
+{status
+          ? message && <div className="ErrorMessage">{message}</div>
+          :null}
 
   </div>
   )

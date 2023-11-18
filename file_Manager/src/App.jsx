@@ -10,7 +10,7 @@ import { auth } from "./firebaseConfig";
 import UplodeFile from "./assets/component/UplodeFile";
 
 function App() {
-  const [count, setCount] = useState(0);
+  
 
   return (
     <>

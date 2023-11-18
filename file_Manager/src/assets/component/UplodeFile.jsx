@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import"../../App.css"
 import {
   storage,
   ref,
@@ -59,19 +60,22 @@ const UplodeFile = () => {
   }, []);
 
   return (
-    <div>
+    <div className="upload-file-container">
       <FliePage allData={allData}  getData={getdata} />
       <h1>Upload File</h1>
-      <input
+      <input className="file-input"
         type="file"
         onChange={(e) => {
           e.preventDefault();
-          setFile(e.target.files[0]);
+          setFile(e.target.files[0]); 
+           
         }}
       ></input>
-      <button
+      <button className="upload-button"
         onClick={() => {
           handelUplode();
+          disabled={loading}
+          
         }}
       >
         submit
